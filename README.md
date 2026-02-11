@@ -5,15 +5,21 @@ A simple inverse kinematics solver for MANO hand model, SMPL body model, and SMP
 ## Installation
 
 ```bash
-pip install -e ".[dev]"
+pip install eden-mpi-ik
+```
+
+For development:
+
+```bash
+pip install "eden-mpi-ik[dev]"
 ```
 
 ## Usage
 
 ```python
-from mpi_ik import MANO_MODEL_PATH, KinematicModel, KinematicPCAWrapper, MANOArmature, Solver
+from mpi_ik import MANO_LEFT_MODEL_PATH, KinematicModel, KinematicPCAWrapper, MANOArmature, Solver
 
-mesh = KinematicModel(MANO_MODEL_PATH, MANOArmature, scale=1000)
+mesh = KinematicModel(MANO_LEFT_MODEL_PATH, MANOArmature, scale=1000)
 wrapper = KinematicPCAWrapper(mesh, n_pose=12)
 solver = Solver(verbose=True)
 
@@ -38,11 +44,11 @@ Convert official MANO/SMPL/SMPL-H model files into the format expected by this p
 By default, converted models are saved to `~/.cache/mpi_ik/`:
 
 ```bash
-# Output defaults to ~/.cache/mpi_ik/mano.pkl
-mpi-ik-prepare --model-type mano --input path/to/mano_v1_2/models/MANO_LEFT.pkl
+# Output defaults to ~/.cache/mpi_ik/mano_left.pkl
+mpi-ik-prepare --model-type mano-left --input path/to/mano_v1_2/models/MANO_LEFT.pkl
 
 # Or specify a custom output path
-mpi-ik-prepare --model-type mano --input path/to/mano_v1_2/models/MANO_LEFT.pkl --output custom/path/mano.pkl
+mpi-ik-prepare --model-type mano-left --input path/to/mano_v1_2/models/MANO_LEFT.pkl --output custom/path/mano_left.pkl
 ```
 
 The cache directory can be overridden with the `MPI_IK_CACHE_DIR` environment variable.

@@ -11,10 +11,11 @@ from pathlib import Path
 
 import numpy as np
 
-from mpi_ik.config import CACHE_DIR, MANO_MODEL_PATH, SMPL_MODEL_PATH, SMPLH_MODEL_PATH
+from mpi_ik.config import CACHE_DIR, MANO_LEFT_MODEL_PATH, MANO_RIGHT_MODEL_PATH, SMPL_MODEL_PATH, SMPLH_MODEL_PATH
 
 _DEFAULT_OUTPUT = {
-    'mano': MANO_MODEL_PATH,
+    'mano-left': MANO_LEFT_MODEL_PATH,
+    'mano-right': MANO_RIGHT_MODEL_PATH,
     'smpl': SMPL_MODEL_PATH,
     'smplh': SMPLH_MODEL_PATH,
 }
@@ -107,7 +108,8 @@ def prepare_smplh_model(input_path: str | Path, output_path: str | Path) -> None
 
 
 _PREPARE_FUNCS = {
-    'mano': prepare_mano_model,
+    'mano-left': prepare_mano_model,
+    'mano-right': prepare_mano_model,
     'smpl': prepare_smpl_model,
     'smplh': prepare_smplh_model,
 }

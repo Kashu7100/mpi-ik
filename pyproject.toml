@@ -3,14 +3,26 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mpi-ik"
-version = "0.2.0"
+name = "eden-mpi-ik"
+version = "0.3.0"
 description = "A simple inverse kinematics solver for MANO hand model, SMPL body model, and SMPL-H body+hand model."
 readme = "README.md"
-license = "MIT"
+license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
     { name = "Kashu Yamazaki" },
+]
+keywords = ["inverse-kinematics", "mano", "smpl", "smplh", "hand-pose", "body-pose"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
 ]
 dependencies = [
     "numpy",
@@ -25,3 +37,11 @@ mpi-ik-prepare = "mpi_ik.prepare_model:main"
 [project.urls]
 Homepage = "https://github.com/Kashu7100/mpi-ik"
 Repository = "https://github.com/Kashu7100/mpi-ik"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mpi_ik"]
+core-metadata-version = "2.3"
+
+[tool.hatch.build.targets.sdist]
+core-metadata-version = "2.3"
+exclude = ["*.zip", "model_files/", ".claude/"]

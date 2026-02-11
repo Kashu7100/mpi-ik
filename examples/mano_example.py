@@ -6,7 +6,7 @@ kinematics, then recovers the parameters with the LM solver.
 
 import numpy as np
 
-from mpi_ik import MANO_MODEL_PATH, KinematicModel, KinematicPCAWrapper, MANOArmature, Solver
+from mpi_ik import MANO_LEFT_MODEL_PATH, KinematicModel, KinematicPCAWrapper, MANOArmature, Solver
 
 
 def main() -> None:
@@ -17,7 +17,7 @@ def main() -> None:
     n_shape = 10
     pose_pca = np.random.normal(size=n_pose)
     shape = np.random.normal(size=n_shape)
-    mesh = KinematicModel(MANO_MODEL_PATH, MANOArmature, scale=1000)
+    mesh = KinematicModel(MANO_LEFT_MODEL_PATH, MANOArmature, scale=1000)
 
     wrapper = KinematicPCAWrapper(mesh, n_pose=n_pose)
     solver = Solver(verbose=True)
