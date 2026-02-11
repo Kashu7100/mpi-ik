@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mpi-ik"
+version = "0.2.0"
+description = "A simple inverse kinematics solver for MANO hand model, SMPL body model, and SMPL-H body+hand model."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Kashu Yamazaki" },
+]
+dependencies = [
+    "numpy",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+mpi-ik-prepare = "mpi_ik.prepare_model:main"
+
+[project.urls]
+Homepage = "https://github.com/Kashu7100/mpi-ik"
+Repository = "https://github.com/Kashu7100/mpi-ik"

@@ -1,69 +1,52 @@
-# Minimal-IK
+# MPI IK
 
-A simple and naive inverse kinematics solver for MANO hand model, SMPL body model, and SMPL-H body+hand model.
+A simple inverse kinematics solver for MANO hand model, SMPL body model, and SMPL-H body+hand model.
 
-Briefly, given joint coordinates (and optional other keypoints), the solver gives the corresponding model parameters.
+## Installation
 
-Levenberg–Marquardt algorithm is used, the energy is simply the L2 distance between the keypoints.
-
-As no prior nor regularization terms are used, it is not surprising that the code does not work well on "real" data. My intention to release the code was to give some hints on how to develope a customized IK solver. I would recommend to add more complicating terms for better performance.
-
-## Results
-
-### Qualitative
-
-This is the example result on the SMPL body model.
-The left is the ground truth, and the right one is the estimation.
-You can notice the minor difference between the left hands.
-
-![](body.png)
-
-Below is the example result of the MANO hand model.
-Left for ground truth, and right for estimation.
-
-![](hand.png)
-
-### Quantitative
-
-We test this approach on the [AMASS dataset](https://amass.is.tue.mpg.de/).
-
-|             | Mean Joint Error (mm) | Mean Vertex Error (mm) |
-| ----------  | --------------------- | ---------------------- |
-| SMPL (body) | 14.406                | 23.110                 |
-| MANO (hand) | 2.15                  | 3.42                   |
-
-We assume that the global rotation is known.
-We discuss this further in the `Customization Notes` section.
+```bash
+pip install -e ".[dev]"
+```
 
 ## Usage
 
-### Models
+```python
+from mpi_ik import MANO_MODEL_PATH, KinematicModel, KinematicPCAWrapper, MANOArmature, Solver
 
-1. Download the official model from MPI.
-2. See `config.py` and set the official model path.
-3. See `prepare_model.py`, use the provided function to pre-process the model.
+mesh = KinematicModel(MANO_MODEL_PATH, MANOArmature, scale=1000)
+wrapper = KinematicPCAWrapper(mesh, n_pose=12)
+solver = Solver(verbose=True)
 
-### Solver
+_, keypoints = mesh.set_params(pose_pca=pose_pca, pose_glb=pose_glb, shape=shape)
+# keypoints (21, 3)
+params_est = solver.solve(wrapper, keypoints)
+```
 
-1. See `example.py`, un-comment the corresponding code.
-2. `python example.py`.
-3. The example ground truth mesh and estimated mesh are saved to `gt.obj` and `est.obj` respectively.
+See `examples/mano_example.py` for a full working example.
 
-### Dependencies
+## Model Download
 
-Every required package is available via `pip install`.
+Download the official model files from the following sites (registration required):
 
-### Customization Notes
+- **MANO**: https://mano.is.tue.mpg.de/
+- **SMPL**: https://smpl.is.tue.mpg.de/
+- **SMPL-H**: https://mano.is.tue.mpg.de/ (included with MANO download)
 
-Again, we note that this approach cannot handle large global rotations (R0) due to the high non-convexity.
-For example, when the subject keeps the T pose but faces backwards.
+## Model Preparation
 
-In such cases, a good initialization, at least for R0, is necessary.
+Convert official MANO/SMPL/SMPL-H model files into the format expected by this package.
+By default, converted models are saved to `~/.cache/mpi_ik/`:
 
-We also note that this approach is sensitive the the scale (i.e. length unit), as it would affect the MSE and the update step.
-Please consider using the default scale if you do not have special reasons.
+```bash
+# Output defaults to ~/.cache/mpi_ik/mano.pkl
+mpi-ik-prepare --model-type mano --input path/to/mano_v1_2/models/MANO_LEFT.pkl
 
-## Credits
+# Or specify a custom output path
+mpi-ik-prepare --model-type mano --input path/to/mano_v1_2/models/MANO_LEFT.pkl --output custom/path/mano.pkl
+```
 
-* @yxyyyxxyy for the quantitative test on the AMASS dataset.
-* @zjykljf for the starter code of the LM solver.
+The cache directory can be overridden with the `MPI_IK_CACHE_DIR` environment variable.
+
+## Acknowledgement
+
+This project is based on [Minimal-IK](https://github.com/CalciferZh/Minimal-IK) by Yuxiao Zhou.
