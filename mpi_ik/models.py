@@ -230,6 +230,18 @@ class KinematicModel:
         """
         return np.dstack((np.zeros((x.shape[0], 4, 3)), x))
 
+    def to_trimesh(self):
+        """
+        Return the current mesh as a :class:`trimesh.Trimesh`.
+
+        Returns
+        -------
+        trimesh.Trimesh
+        """
+        import trimesh
+
+        return trimesh.Trimesh(vertices=self.verts, faces=self.faces, process=False)
+
     def save_obj(self, path: str | Path) -> None:
         """
         Save the current mesh as a Wavefront OBJ file.
